@@ -28,7 +28,7 @@ final byte LIS3MDL_REG_INT_THS_L = 0x32; ///< Low byte of the irq threshold
 //	CONTROL REGISTER 1  0x20
 /** Temperature Control */
 final byte LIS3MDL_TEMP_DISABLE = 0x00;
-final byte LIS3MDL_TEMP_ENABLE = 0x80;
+final byte LIS3MDL_TEMP_ENABLE = byte(0x80);
 
 /** The magnetometer performance mode */
 final byte  LIS3MDL_LOWPOWERMODE = 0x00;  ///< Low power mode
@@ -73,6 +73,9 @@ final byte  LIS3MDL_POWERDOWNMODE = 0x02;  ///< Powered-down mode
 
 boolean initCompass(){
   boolean enabled = true;
+  //compassWrite(LIS3MDL_REG_CTRL_REG2,byte(0x0C));
+
+  delay(100);
   if(compassReadByte(LIS3MDL_REG_WHO_AM_I) != 0x3D){
     println("initCompass ID fail");
     return false;
@@ -88,7 +91,7 @@ boolean initCompass(){
   compassWrite(LIS3MDL_REG_CTRL_REG2,outByte);
   if(compassReadByte(LIS3MDL_REG_CTRL_REG2) != outByte){ enabled = false; }
   // Control Reg 3 used to enable/disable compass sampling
-	println("status reg: 0x"+hex(compasReadByte(LIS3MDL_REG_STATUS_REG)));
+	println("status reg: 0x"+hex(compassReadByte(LIS3MDL_REG_STATUS_REG)));
 
   return enabled;
 }

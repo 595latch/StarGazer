@@ -26,10 +26,10 @@ void setup(){
   //printArray(I2C.list());
   i2c = new I2C(I2C.list()[0]);
 
-  boo = initCompass();
-  println("compass enabled: "+boo);
-  // boo = initSteppers();
-  // println("steppers enabled: "+boo);
+  //boo = initCompass();
+  //println("compass enabled: "+boo);
+   boo = initSteppers();
+   println("steppers enabled: "+boo);
   // lastTick = second();
 }
 

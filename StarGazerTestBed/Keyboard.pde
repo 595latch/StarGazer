@@ -11,11 +11,11 @@ void keyPressed(){
     case 'C':
       isRunning = true;
       lastTick = second();
-      startCompass();
+      //startCompass();
       break;
     case 'c':
       isRunning = false;
-      stopCompass();
+      //stopCompass();
       break;
     default:
       break;

@@ -33,12 +33,12 @@ final boolean ON = true;
 final int AZIMUTH = 0;
 final int ALTITUDE = 1;
 
-int[] currentStep = new int [2];
-int[] azimuthEnable = new int {8,13};
-int[] azumuthCoils = new int {9,10,11,12};
-int[] altitudeEnable = new int {2,7};
-int[] altitudeCoils = new int {3,4,5,6};
-int[] steps = new int {10,9,5,6};
+int[] currentStep = new int {0,0};
+int[] azimuthEnable = new int {8,13};  // PWM pins
+int[] azumuthCoils = new int {9,10,11,12};  // PWM pins
+int[] altitudeEnable = new int {2,7};  // PWM pins
+int[] altitudeCoils = new int {3,4,5,6};  // PWM pins
+int[] steps = new int {10,9,5,6};  // PWM pins
 
 int revSteps = 200;
 float azimuthRevolutions = 0.0;
@@ -49,13 +49,16 @@ float altitudeDegrees = 0.0;
 
 boolean initSteppers(){
   boolean enabled = true;
-
+  stepperReset();  // do a software reset on the PWM driver
   // mode 1 register: RESTART; EXTCLK; AI; SLEEP; SUB1; SUB2; SUB3; ALLCALL
   stepperWriteByte(PCA9685_MODE1,0x21); // enable Auto Increment, respond to All Call
   // mode 2 register: 0; 0; 0; INVERT; OCH; OUTDRV; OUTNE1; OUTNE0
   stepperWriteByte(PCA9685_MODE2,0x04); // outputs set to totem pole DEFAULT REG VALUE
-  // prescale register: default set to 200Hz, should be OK
-  
+  // prescale register: default set to 200Hz, should be OK since we don't PWM
+  stepperStep(AZIMUTH,0);
+  stepperStep(ALTITUDE,0);
+  stepperEnable(AZIMUTH);
+  stepperEnable(ALTITUDE);
   
   return enabled;
 }
@@ -97,7 +100,8 @@ void stepperEnable(int stepper){
 }
 
 // receives the step number and uses the steps array to drive the pins
-void stepperStep(int stepper, int step){
+void stepperStep(int _stepper, int _step){
+  int step = _step%4;  // taking only whole steps
   i2c.beginTransmission(stepperAddress);
   if(stepper = AZIMUTH
     i2c.write(azimuthCoils[0],boolean(step & 0x8));

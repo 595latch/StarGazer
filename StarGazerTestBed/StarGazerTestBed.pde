@@ -38,8 +38,17 @@ void draw(){
 
   if(isRunning){
     if(second() != lastTick){
-      updateCompassAxes();
-      printCompassAxes();
+      lastTick = second();
+      //updateCompassAxes();
+      //printCompassAxes();
+      currentStep[ALTITUDE]++;
+      currentStep[AZIMUTH]++;
+      stepperStep(ALTITUDE,currentStep[ALTITUDE]);
+      stepperStep(AZIMUTH,currentStep[AZIMUTH]);
+      altitudeRevolutions = currentStep[ALTITUDE]/200;
+      azimuthRevolutions = currentStep[AZIMUTH]/200;
+      println("Altitude Step: "+(currentStep[ALTITUIDE]%4)+"Altitude Rotation: "+altitudeRevolutions);
+      println("Azimuth Step: "+(currentStep[AZIMUTH]%4)+"Azimuth Rotation: "+azimuthRevolutions);
     }
   }
 

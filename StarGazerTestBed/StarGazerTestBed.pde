@@ -15,7 +15,7 @@ boolean boo = false;
 
 boolean isRunning = false;
 
-final byte stepperAddress= 0x40;
+
 
 void setup(){
   size(200, 200);
@@ -47,7 +47,7 @@ void draw(){
       stepperStep(AZIMUTH,currentStep[AZIMUTH]);
       altitudeRevolutions = currentStep[ALTITUDE]/200;
       azimuthRevolutions = currentStep[AZIMUTH]/200;
-      println("Altitude Step: "+(currentStep[ALTITUIDE]%4)+"Altitude Rotation: "+altitudeRevolutions);
+      println("Altitude Step: "+(currentStep[ALTITUDE]%4)+"Altitude Rotation: "+altitudeRevolutions);
       println("Azimuth Step: "+(currentStep[AZIMUTH]%4)+"Azimuth Rotation: "+azimuthRevolutions);
     }
   }

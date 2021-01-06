@@ -1,2 +1,2 @@
 # StarGazer
-Custom_Raspberry_Pi_Telescope
+Raspberry Pi Telescope

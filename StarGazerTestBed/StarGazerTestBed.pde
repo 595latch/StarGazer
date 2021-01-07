@@ -8,7 +8,7 @@ DisposeHandler dh;
 
 import processing.io.*;
 
-I2C i2c;
+I2C iic;
 int lastTick;
 
 boolean boo = false;
@@ -24,13 +24,14 @@ void setup(){
   GPIO.pinMode(DRDY,GPIO.INPUT);
   dh = new DisposeHandler(this);
   //printArray(I2C.list());
-  i2c = new I2C(I2C.list()[0]);
+  iic = new I2C(I2C.list()[0]);
 
   //boo = initCompass();
   //println("compass enabled: "+boo);
-   boo = initSteppers();
-   println("steppers enabled: "+boo);
+   //boo = initSteppers();
+   //println("steppers enabled: "+boo);
   // lastTick = second();
+  printCommands();
 }
 
 void draw(){
@@ -40,7 +41,7 @@ void draw(){
     if(second() != lastTick){
       lastTick = second();
       //updateCompassAxes();
-      //printCompassAxes();
+      printCompassAxes();
       currentStep[ALTITUDE]++;
       currentStep[AZIMUTH]++;
       stepperStep(ALTITUDE,currentStep[ALTITUDE]);

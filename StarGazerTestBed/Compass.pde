@@ -70,6 +70,10 @@ final byte  LIS3MDL_SINGLEMODE = 0x01;     ///< Single-shot conversion
 final byte  LIS3MDL_POWERDOWNMODE = 0x02;  ///< Powered-down mode
 
 
+void getCompassID(){
+  println("compass id: 0x"+hex(compassReadByte(LIS3MDL_REG_WHO_AM_I)));
+}
+
 
 boolean initCompass(){
   boolean enabled = true;
@@ -98,10 +102,10 @@ boolean initCompass(){
 
 void compassWrite(byte reg, byte data){
   println("writing 0x"+hex(data)+" to 0x"+hex(reg));
-  i2c.beginTransmission(compassAddress);
-  i2c.write(reg);
-  i2c.write(data);
-  i2c.endTransmission();
+  iic.beginTransmission(compassAddress);
+  iic.write(reg);
+  iic.write(data);
+  iic.endTransmission();
 }
 
 boolean startCompass(){
@@ -125,9 +129,9 @@ boolean stopCompass(){
 
 byte compassReadByte(byte reg){
   println("reading byte from 0x"+hex(reg));
-  i2c.beginTransmission(compassAddress);
-  i2c.write(reg);
-  byte b[] = i2c.read(1);
+  iic.beginTransmission(compassAddress);
+  iic.write(reg);
+  byte b[] = iic.read(1);
   byte returnByte = b[0];
   return returnByte;
 }
@@ -152,10 +156,11 @@ void updateCompassAxes(){
 int compassReadWord(byte reg){
   println("reading word from  0x"+hex(reg));
   int i = 0;
-  i2c.beginTransmission(compassAddress);
-  i2c.write(reg);
-  byte b[] = i2c.read(2);
-  i = (b[1]<<8)|b[0];
+  byte b = compassReadByte(reg);
+  i = b & 0xFF;
+  reg++;
+  b = compassReadByte(reg);
+  i = (b<<8 & 0xFF00);
   if((i & 0x8000) > 0){
     i |= 0xFFFF0000;
   }

@@ -5,27 +5,27 @@
 
 */
 
-final int stepperAddress = 0x40;
+final byte stepperAddress = 0x40;
 
-final int PCA9685_MODE1  = 0x00;
-final int PCA9685_MODE2 = 0x01;
+final byte PCA9685_MODE1  = 0x00;
+final byte PCA9685_MODE2 = 0x01;
 
-final int PCA9685_SUBADR1 = 0x02;
-final int PCA9685_SUBADR2 = 0x03;
-final int PCA9685_SUBADR3 = 0x04;
-final int PCA9685_ALL_CALL = 0x05;
-final int PCA9685_PRESCALE = 0xFE;
-final int PCA9685_TEST_MODE = 0xFF;
+final byte PCA9685_SUBADR1 = 0x02;
+final byte PCA9685_SUBADR2 = 0x03;
+final byte PCA9685_SUBADR3 = 0x04;
+final byte PCA9685_ALL_CALL = 0x05;
+final byte PCA9685_PRESCALE = byte(0xFE);
+final byte PCA9685_TEST_MODE = byte(0xFF);
 
-final int LED0_ON_L = 0x06;
-final int LED0_ON_H = 0x07;
-final int LED0_OFF_L = 0x08;
-final int LED0_OFF_H = 0x09;
+final byte LED0_ON_L = 0x06;
+final byte LED0_ON_H = 0x07;
+final byte LED0_OFF_L = 0x08;
+final byte LED0_OFF_H = 0x09;
 
-final int ALLLED_ON_L = 0xFA;
-final int ALLLED_ON_H = 0xFB;
-final int ALLLED_OFF_L = 0xFC;
-final int ALLLED_OFF_H = 0xFD;
+final byte ALLLED_ON_L = byte(0xFA);
+final byte ALLLED_ON_H = byte(0xFB);
+final byte ALLLED_OFF_L = byte(0xFC);
+final byte ALLLED_OFF_H = byte(0xFD);
 
 final boolean OFF = false;
 final boolean ON = true;
@@ -52,9 +52,14 @@ boolean initSteppers(){
   //println("stepper reset");
   //stepperReset();  // do a software reset on the PWM driver
   // mode 1 register: RESTART; EXTCLK; AI; SLEEP; SUB1; SUB2; SUB3; ALLCALL
-  stepperWriteByte(PCA9685_MODE1,0x21); // enable Auto Increment, respond to All Call
+  //stepperWriteByte(PCA9685_MODE1,0x01); // enable Auto Increment, respond to All Call
+  iic.beginTransmission(0x40);
+  iic.write(PCA9685_MODE1);
+  iic.write(0x21); // auto increment put in normal mode 
+  iic.write(0x04); // default
+  iic.endTransmission();
   // mode 2 register: 0; 0; 0; INVERT; OCH; OUTDRV; OUTNE1; OUTNE0
-  stepperWriteByte(PCA9685_MODE2,0x04); // outputs set to totem pole DEFAULT REG VALUE
+  //stepperWriteByte(PCA9685_MODE2,0x04); // outputs set to totem pole DEFAULT REG VALUE
   // prescale register: default set to 200Hz, should be OK since we don't PWM
   stepperStep(AZIMUTH,0);
   stepperStep(ALTITUDE,0);
@@ -64,32 +69,53 @@ boolean initSteppers(){
   return enabled;
 }
 
+byte stepperReadAll(){
+  iic.beginTransmission(0x40);
+  iic.write(0x00);
+  iic.write(0x21);
+  byte[] b = iic.read(70);
+  byte returnByte = b[0];
+  return returnByte;
+}
+
+byte stepperReadByte(){
+  iic.beginTransmission(0x40);
+  iic.write(0x00);
+  //iic.write(0x21);
+  byte[] b = iic.read(1);
+  byte returnByte = b[0];
+  return returnByte;
+}
   
 void stepperWriteByte(int reg, int data){
   println("writing 0x"+hex(data)+" to 0x"+hex(reg));
-  i2c.beginTransmission(0x40);
-  i2c.write(reg);
-  i2c.write(data);
-  i2c.endTransmission();
+  iic.beginTransmission(0x40);
+  iic.write(reg);
+  iic.write(data);
+  iic.endTransmission();
 }
 
 void stepperSetPin(int pin, boolean powered){
  int pinToSet = LED0_ON_L + 4 * pin;
- println("writing 0x"+powered+"to 0x"+hex(pinToSet));
- i2c.beginTransmission(stepperAddress);
- i2c.write(pinToSet);
+ println("writing "+powered+" to 0x"+hex(pinToSet));
+ 
  if(powered){  // set the driver to full on
-   i2c.write(0x00);
-   i2c.write(0x10);  
-   i2c.write(0x00);
-   i2c.write(0x00);
+ iic.beginTransmission(stepperAddress);
+ iic.write(pinToSet);
+   iic.write(0x00);
+   iic.write(0x10);  
+   iic.write(0x00);
+   iic.write(0x00);
+ iic.endTransmission();
  } else {      // set the driver to full off
-   i2c.write(0x00);
-   i2c.write(0x00);  
-   i2c.write(0x00);
-   i2c.write(0x10);
+ iic.beginTransmission(stepperAddress);
+ iic.write(pinToSet);
+   iic.write(0x00);
+   iic.write(0x00);  
+   iic.write(0x00);
+   iic.write(0x10);
+ iic.endTransmission();
  }
- i2c.endTransmission();
 }
 
 void stepperEnable(int stepper){
@@ -105,7 +131,7 @@ void stepperEnable(int stepper){
 // receives the step number and uses the steps array to drive the pins
 void stepperStep(int _stepper, int _step){
   int step = _step%4;  // taking only whole steps
-  i2c.beginTransmission(stepperAddress);
+  iic.beginTransmission(stepperAddress);
   if(_stepper == AZIMUTH){
     stepperSetPin(azimuthCoils[0],boolean(step & 0x8));
     stepperSetPin(azimuthCoils[1],boolean(step & 0x4));
@@ -130,8 +156,8 @@ void stepperDisable(int stepper){
 }
 
 void stepperReset(){
-  i2c.beginTransmission(0x00);
-  i2c.write(0x06);
-  i2c.endTransmission();
+  iic.beginTransmission(0x00);
+  iic.write(0x06);
+  iic.endTransmission();
   delay(10);
 }

@@ -194,8 +194,7 @@ void manualDisconnect(int cause){
       time(&lastTime);	// start timer
       break;
     case RemoteTermination:
-      puts("client disconnected, shutting down\n");
-      exit(0);
+      puts("client disconnected\n");
       break;
     default:
       break;

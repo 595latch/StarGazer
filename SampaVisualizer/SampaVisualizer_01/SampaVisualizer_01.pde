@@ -15,7 +15,7 @@ float sunA,sunZ,moonA,moonZ;  // sun and moon positions
 final float aRange = 1080.0;  // 3x 360
 final float zRange = 540.0;   // 3x 180
 final int axes = 2;
-final int vertices = 144;
+final int vertices = 288;  // every 10 munites for 48 hours
 final int X = 0;
 final int Y = 1;
 float xOffset,yOffset;

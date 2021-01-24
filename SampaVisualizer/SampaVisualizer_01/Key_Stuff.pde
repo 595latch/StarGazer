@@ -15,9 +15,19 @@ void keyPressed(){
           println("Already connected to sampa");
         }
         break;
+      case 'p':
+        printVertecesArrays();
+        break;
       default:
         println("keyboard got "+key);
         break;
     }
+  }
+}
+
+void printVertecesArrays(){
+  println("Sun Az    Sun Al    Moon AZ    Moon AL");
+  for(int i=0; i<vertices; i++){
+    println(sunHistory[X][i]+"    "+sunHistory[Y][i]+"    "+moonHistory[X][i]+"    "+moonHistory[Y][i]);
   }
 }

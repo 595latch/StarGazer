@@ -31,7 +31,7 @@ void drawSun(){
   stroke(sunColor);
   noFill();
   beginShape(POINTS);
-  for(int v=0; v<vertices; v++){
+  for(int v=1; v<vertices; v++){
     vertex(sunHistory[X][v],sunHistory[Y][v]);
   }
   endShape();
@@ -44,7 +44,7 @@ void drawMoon(){
   stroke(moonColor);
   noFill();
   beginShape(POINTS);
-  for(int v=0; v<vertices; v++){
+  for(int v=1; v<vertices; v++){
     vertex(moonHistory[X][v],moonHistory[Y][v]);
   }
   endShape();

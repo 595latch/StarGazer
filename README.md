@@ -1,8 +1,7 @@
 # StarGazer
 ## Another Raspberry Pi Telescope
 
-The idea for this project came out of conversations with a friend, Gregory, many years ago. We were just BS-ing about working on something and the notion of a solar tracker for Sun observation and photography came up. Lots of cool problems to solve in it. Motor control, Mechanical positioning drive, electronics and programming. We were planning to hack a web cam and glue it to the back of an old telephoto lens. I had gotten as far as that before the project died. Got some cool images, and learned about how to dial in the focal point for the image sensor. But it never went anywhere, just a thought, until the Fall of '20 I saw that the Raspberry Pi had come out with a new [high def camera]
-(https://www.adafruit.com/product/4561), and it was basically just the bare image sensor PCB with a lens mount. I had been messing around with Raspberry Pi 4 for a client, and figured no time like the COVID lockdown for a project.
+The idea for this project came out of conversations with a friend, Gregory, many years ago. We were just BS-ing about working on something and the notion of a solar tracker for Sun observation and photography came up. Lots of cool problems to solve in it. Motor control, Mechanical positioning drive, electronics and programming. We were planning to hack a web cam and glue it to the back of an old telephoto lens. I had gotten as far as that before the project died. Got some cool images, and learned about how to dial in the focal point for the image sensor. But it never went anywhere, just a thought, until the Fall of '20 I saw that the Raspberry Pi had come out with a new [high def camera](https://www.adafruit.com/product/4561), and it was basically just the bare image sensor PCB with a lens mount. I had been messing around with Raspberry Pi 4 for a client, and figured no time like the COVID lockdown for a project.
 
 This time, It feels like it's really going to happen.
 
